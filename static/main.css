@@ -1,0 +1,9 @@
+body{
+    margin-bottom: 400px;
+}
+footer{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100vw !important;
+}

@@ -1,7 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash
 from flask_pymongo import PyMongo
 from flask import jsonify , request, redirect, url_for
 from bson.objectid import ObjectId
+from forms import RegistrationForm,LoginForm
 mongo = PyMongo()
 
 data = [
@@ -26,6 +27,7 @@ def get_my_ip():
 
 def create_app():
   app = Flask(__name__)
+  app.config['SECRET_KEY'] = '85cda92639ad685150b4d89ff3d1b7cc'
   app.config.update(
   MONGO_URI='mongodb+srv://admin:testadmin@cluster0-vgyqz.mongodb.net/test?retryWrites=true&w=majority'
   )
@@ -60,6 +62,26 @@ def editPost():
       print('Updated:', myquery)
       return redirect(url_for('index'))
   return render_template('index.html')
+
+@app.route('/register', methods=['GET','POST'])
+def register():
+  form = RegistrationForm()
+  if form.validate_on_submit():
+    mongo.db.users.insert_one({'username': form.username.data,'email' : form.email.data,'password': form.password.data})
+    flash(f'Account created for {form.username.data}!', 'success')
+    return redirect(url_for('index'))
+  return render_template('register.html',title="Register", form=form)
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+  form = LoginForm()
+  if form.validate_on_submit():
+    if mongo.db.users.find_one({'email':form.email.data, 'password' : form.password.data}):
+      flash('You have been logged in!','success')
+      return redirect(url_for('index'))
+    else:
+      flash('Login Unsuccessful. Please check username and password' , 'danger')
+  return render_template('login.html',title="Login", form=form)
 
 if __name__ == '__main__':
   app.run(host='192.168.0.37', port=8000, debug=True)
