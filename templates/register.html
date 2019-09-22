@@ -2,63 +2,68 @@
 {%block content%}
     <div class="row pt-5 pb-5">
         <div class="col-12">
-            <form method="POST" action="">
+            <form method="POST" action="" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
                     <legend class="border-bottom mb-4">Join Today</legend>
                     <div class="form-group">
-                        {{ form.username.label(class="form-control-label") }}
+                        {{ form.productname.label(class="form-control-label") }}
 
-                        {% if form.username.errors%}
-                            {{ form.username(class="form-control form-control-lg is-invalid") }}
+                        {% if form.productname.errors%}
+                            {{ form.productname(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
-                                {% for error in form.username.errors%}
+                                {% for error in form.productname.errors%}
                                     <span>{{ error }}</span>
                                 {%endfor%}
                             </div>
                         {% else %}
-                            {{ form.username(class="form-control form-control-lg") }}
+                            {{ form.productname(class="form-control form-control-lg") }}
                         {%endif%}
 
                         
                     </div>
                     <div class="form-group">
-                        {{ form.email.label(class="form-control-label") }}
-                        {% if form.email.errors%}
-                            {{ form.email(class="form-control form-control-lg is-invalid") }}
+                        {{ form.description.label(class="form-control-label") }}
+                        {% if form.description.errors%}
+                            {{ form.description(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
-                                {% for error in form.email.errors%}
+                                {% for error in form.description.errors%}
                                     <span>{{ error }}</span>
                                 {%endfor%}
                             </div>
                         {% else %}
-                            {{ form.email(class="form-control form-control-lg") }}
+                            {{ form.description(class="form-control form-control-lg") }}
                         {%endif%}
                     </div>
-                    <div class="form-group">
-                        {{ form.password.label(class="form-control-label") }}
-                        {% if form.password.errors%}
-                            {{ form.password(class="form-control form-control-lg is-invalid") }}
+                    {{ form.photo }}
+                    {% for error in form.photo.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                    {% endfor %}
+                    <!-- <div class="form-group">
+                        {{ form.photo.label(class="form-control-label") }}
+                        {% if form.photo.errors%}
+                            {{ form.photo(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
-                                {% for error in form.password.errors%}
+                                {% for error in form.photo.errors%}
                                     <span>{{ error }}</span>
                                 {%endfor%}
                             </div>
                         {% else %}
-                            {{ form.password(class="form-control form-control-lg") }}
+                            {{ form.photo(class="form-control form-control-lg") }}
                         {%endif%}
-                    </div>
+                    </div> -->
+
                     <div class="form-group">
-                        {{ form.confirm_password.label(class="form-control-label") }}
-                        {% if form.confirm_password.errors%}
-                            {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
+                        {{ form.maxEntries.label(class="form-control-label") }}
+                        {% if form.maxEntries.errors%}
+                            {{ form.maxEntries(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
-                                {% for error in form.confirm_password.errors%}
+                                {% for error in form.maxEntries.errors%}
                                     <span>{{ error }}</span>
                                 {%endfor%}
                             </div>
                         {% else %}
-                            {{ form.confirm_password(class="form-control form-control-lg") }}
+                            {{ form.maxEntries(class="form-control form-control-lg") }}
                         {%endif%}
                     </div>
                 </fieldset>
@@ -66,11 +71,6 @@
                     {{form.submit(class="btn btn-outline-info")}}
                 </div>
             </form>
-        </div>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Already Have An Account? <a href="{{ url_for('login') }}">Click Here!</a>
-            </small>
         </div>
     </div>
 

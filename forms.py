@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,PasswordField,SubmitField, BooleanField
+from wtforms import StringField,PasswordField,SubmitField, BooleanField, TextAreaField , IntegerField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms.validators import DataRequired, Length, Email, EqualTo
+from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(),Length(min=3, max=15)])
@@ -21,3 +23,20 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember Me')
 
     submit = SubmitField('Log In')
+
+
+photos = UploadSet('photos', IMAGES)
+
+class RegisterProductForm(FlaskForm):
+
+    productname = StringField('Product Name',validators=[DataRequired(),Length(min=3,max=50)])
+    
+    description = TextAreaField('Description',validators=[DataRequired()])
+
+    maxEntries = IntegerField('Maximum Entries')
+
+    photo = FileField(validators=[FileAllowed(photos, 'Image only!')])
+
+    submit = SubmitField('Add Product')
+
+
