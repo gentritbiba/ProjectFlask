@@ -46,8 +46,8 @@ def index():
     if request.form.get('insert_name')!= None:
       mongo.db.user.insert_one({'user': request.form.get('name')})
     if request.form.get('search_btn') != None:
-      return render_template('index.html',data = mongo.db.user.find(),s=request.form.get('s'))
-  return render_template('index.html',data = mongo.db.user.find())
+      return render_template('index.html',products = mongo.db.products.find(),s=request.form.get('s'))
+  return render_template('index.html',products = mongo.db.products.find())
 
 @app.route('/editPost' , methods=['GET','POST'])
 def editPost():

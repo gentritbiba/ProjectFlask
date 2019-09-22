@@ -6,61 +6,30 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-12">
+            {%for product in products %}
+            {%if (s!=undefined and s.lower() in product['productname'].lower()) or s==undefined %}
             <div class="row product-post">
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-12">
-                            <h2>Product #1</h2>
+                            <h2>{{product['productname']}}</h2>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <p>Get a chance to win our brand new product, it has amazing features. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto dignissimos neque enim recusandae laborum praesentium nobis accusantium cum, eos nisi magni tempore sapiente harum, temporibus necessitatibus doloremque eaque sit voluptate.</p>
+                            <p>{{product['description']}}</p>
                             <a href="#" class="btn btn-outline-primary">Get Now</a>
                         </div>
                         
                     </div>
                 </div>
                 <div class="col-md-4 product-image">
-                    <img src="{{url_for('static',filename='content/images/placeholder.jpg')}}">
+                    <img src="{{product['photo']}}">
                 </div>
             </div>
-            <div class="row product-post">
-                <div class="col-md-8">
-                    <div class="row">
-                        <div class="col-12">
-                            <h2>Product #1</h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <p>Get a chance to win our brand new product, it has amazing features. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto dignissimos neque enim recusandae laborum praesentium nobis accusantium cum, eos nisi magni tempore sapiente harum, temporibus necessitatibus doloremque eaque sit voluptate.</p>
-                            <a href="#" class="btn btn-outline-primary">Get Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 product-image">
-                    <img src="{{url_for('static',filename='content/images/placeholder.jpg')}}">
-                </div>
-            </div>
-            <div class="row product-post">
-                <div class="col-md-8">
-                    <div class="row">
-                        <div class="col-12">
-                            <h2>Product #1</h2>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <p>Get a chance to win our brand new product, it has amazing features. Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto dignissimos neque enim recusandae laborum praesentium nobis accusantium cum, eos nisi magni tempore sapiente harum, temporibus necessitatibus doloremque eaque sit voluptate.</p>
-                            <a href="#" class="btn btn-outline-primary">Get Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 product-image">
-                    <img src="{{url_for('static',filename='content/images/placeholder.jpg')}}">
-                </div>
-            </div>
+            {%endif%}
+            {%endfor%} 
+            
         </div>
     </div>
 </div>
