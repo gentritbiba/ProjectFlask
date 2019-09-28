@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 
 class RegistrationForm(FlaskForm):
+    
     username = StringField('Username', validators=[DataRequired(),Length(min=3, max=15)])
 
     email = StringField('Email',validators=[DataRequired(),Email()])
@@ -16,7 +17,8 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
 class LoginForm(FlaskForm):
-    email = StringField('Email',validators=[DataRequired(),Email()] )
+    
+    email = StringField('Email' )
 
     password = PasswordField('Password', validators=[DataRequired()])
 
@@ -32,6 +34,8 @@ class RegisterProductForm(FlaskForm):
     productname = StringField('Product Name',validators=[DataRequired(),Length(min=3,max=50)])
     
     description = TextAreaField('Description',validators=[DataRequired()])
+
+    videoId = StringField('Video ID')
 
     maxEntries = IntegerField('Maximum Entries')
 

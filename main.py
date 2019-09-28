@@ -4,7 +4,9 @@ from flask_pymongo import PyMongo
 from flask import jsonify , request, redirect, url_for , session, json
 from bson.objectid import ObjectId
 from forms import RegistrationForm,LoginForm
-from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
+from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class 
+from urllib.parse import urlparse
+from apprun import host,debug,port
 mongo = PyMongo()
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -76,7 +78,7 @@ def register():
       
       filename = photos.save(form.photo.data)
       file_url = photos.url(filename)
-      mongo.db.products.insert_one({'productname': form.productname.data,'description' : form.description.data,'maxEntries': form.maxEntries.data,'photo':file_url})
+      mongo.db.products.insert_one({'productname': form.productname.data,'description' : form.description.data,'maxEntries': form.maxEntries.data,'photo':urlparse(file_url).path,'videoId': form.videoId.data})
       flash(f'Product "{form.productname.data}" created!', 'success')
       return redirect(url_for('register'))
     return render_template('register.html',title="Register", form=form)
@@ -96,6 +98,18 @@ def login():
       flash('Login Unsuccessful. Please check username and password' , 'danger')
   return render_template('login.html',title="Login", form=form)
 
+@app.route('/product/<string:productName>')
+def product(productName):
+  print(productName,'aaaaaa')
+  product=mongo.db.products.find_one({'productname': productName})
+  
+  if product:
+    return render_template('product.html',title=productName, product=product)
+  else:
+    return redirect(url_for('index'))
+
+
+
+
 if __name__ == '__main__':
-  app.run(host='192.168.0.37', port=8000, debug=True)
- 
+  app.run(host=host, port=port, debug=debug)
