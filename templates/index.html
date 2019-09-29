@@ -2,6 +2,7 @@
 {% block title %}Home Page{% endblock %}
 
 {%block header%}
+{% if not s %}
 <header class="header">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
@@ -15,15 +16,16 @@
         </div>
     </div>
 </header>
+{%endif%}
 {%endblock%}
 
 {% block content %}
 
-    <div class="row pt-3 pb-3">
+    <div class="row pt-3 pb-3 products">
         <div class="col-12">
             {%for product in products %}
             {%if (s!=undefined and s.lower() in product['productname'].lower()) or s==undefined %}
-            <div id="listings" class="row product-post pt-5 pb-5">
+            <div name="listings" id="listings" class="row product-post pt-5 pb-5">
                 <div class="col-md-8">
                     <div class="row">
                         <div class="col-12">
@@ -49,3 +51,19 @@
 </div>
 
 {% endblock %}
+{% block scripts %}
+{{super()}}
+<script>
+
+if($('.product-post').length==0){
+    console.log('asd');
+    $('.products').html('<h2 id="listings" name="listings">No Products Found</h2>');
+}
+
+
+</script>
+{% if s %}
+<script>window.location.hash="listings";</script>
+{% endif %}
+
+{%endblock%}
