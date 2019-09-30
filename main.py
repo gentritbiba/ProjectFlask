@@ -1,4 +1,5 @@
 import os
+import re
 from flask import Flask, render_template, flash
 from flask_pymongo import PyMongo
 from flask import jsonify , request, redirect, url_for , session, json
@@ -111,14 +112,17 @@ def product(productName):
 @app.route('/productName/<string:productName>',methods=['GET','POST'])
 def addEntries(productName):
   if request.method == 'POST':
-    if request.form.get('email') and request.form.get('entries'):
+    if request.form.get('email') and request.form.get('entries') and re.search('^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$',request.form.get('email')):
       mongoQuery={'email':request.form.get('email'),'product':productName}
       if mongo.db.candidates.find_one(mongoQuery):
         newQuery={'entries':(mongo.db.candidates.find_one(mongoQuery)['entries']+int(request.form.get('entries')))}
         mongo.db.candidates.update_one(mongoQuery, {"$set":newQuery})
       else:
         mongo.db.candidates.insert_one({'email':request.form.get('email'),'product':productName,'entries':int(request.form.get('entries'))})
+      flash(f'You just got { request.form.get("entries") } entries!','success')
       mongo.db.products.update_one({'productname':productName},{"$set":{'entries':(mongo.db.products.find_one({'productname':productName})['entries']+int(request.form.get('entries')))}})
+    else:
+      flash('Request Failed','danger')
   return redirect(url_for('product',productName=productName))
 
 

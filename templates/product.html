@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
-    <div class="page-content">
+    <div class="page-content pt-3">
         <div class="row">
         <div class="col-12">
             <h2 class="w-100 text-center ">
@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-12">
                     <form action="{{url_for('addEntries', productName=product['productname'])}}" method="POST" class="mb-5 mt-5">
-                        <input type="text" name="email" required>
+                        <input type="email" name="email" required>
                         <input type="number" name="entries" min="0" required>
                         <input name="insert_name" class="btn btn-primary" type="submit" value="Submit New Name">
                     </form>
