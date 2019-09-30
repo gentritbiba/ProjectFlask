@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField, BooleanField, TextAreaField , IntegerField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms.validators import DataRequired, Length, Email, EqualTo
-from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
+from flask_uploads import UploadSet, IMAGES
 
 class RegistrationForm(FlaskForm):
     
