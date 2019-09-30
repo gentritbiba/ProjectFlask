@@ -48,6 +48,7 @@ h1,h2,h3,h4,h5,p,span,b,strong{
     height: auto;
     object-fit: contain;
     max-height: 300px;
+    min-height: 300px;
 }
 .product-post{
     margin-top: 20px;

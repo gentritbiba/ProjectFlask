@@ -48,7 +48,7 @@ def index():
     if request.form.get('insert_name')!= None:
       mongo.db.user.insert_one({'user': request.form.get('name')})
     if request.form.get('search_btn') != None:
-      return render_template('index.html',_anchor='exactlocation',products = mongo.db.products.find(),s=request.form.get('s') )
+      return render_template('index.html',products = mongo.db.products.find(),s=request.form.get('s') )
   return render_template('index.html',products = mongo.db.products.find())
 
 @app.route('/editPost' , methods=['GET','POST'])
@@ -78,7 +78,7 @@ def register():
       
       filename = photos.save(form.photo.data)
       file_url = photos.url(filename)
-      mongo.db.products.insert_one({'productname': form.productname.data,'description' : form.description.data,'maxEntries': form.maxEntries.data,'photo':urlparse(file_url).path,'videoId': form.videoId.data})
+      mongo.db.products.insert_one({'productname': form.productname.data,'description' : form.description.data,'maxEntries': form.maxEntries.data,'entries':0,'photo':urlparse(file_url).path,'videoId': form.videoId.data})
       flash(f'Product "{form.productname.data}" created!', 'success')
       return redirect(url_for('register'))
     return render_template('register.html',title="Register", form=form)
@@ -107,6 +107,19 @@ def product(productName):
     return render_template('product.html',title=productName, product=product)
   else:
     return redirect(url_for('index'))
+
+@app.route('/productName/<string:productName>',methods=['GET','POST'])
+def addEntries(productName):
+  if request.method == 'POST':
+    if request.form.get('email') and request.form.get('entries'):
+      mongoQuery={'email':request.form.get('email'),'product':productName}
+      if mongo.db.candidates.find_one(mongoQuery):
+        newQuery={'entries':(mongo.db.candidates.find_one(mongoQuery)['entries']+int(request.form.get('entries')))}
+        mongo.db.candidates.update_one(mongoQuery, {"$set":newQuery})
+      else:
+        mongo.db.candidates.insert_one({'email':request.form.get('email'),'product':productName,'entries':int(request.form.get('entries'))})
+      mongo.db.products.update_one({'productname':productName},{"$set":{'entries':(mongo.db.products.find_one({'productname':productName})['entries']+int(request.form.get('entries')))}})
+  return redirect(url_for('product',productName=productName))
 
 
 

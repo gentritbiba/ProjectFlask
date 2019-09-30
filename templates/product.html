@@ -13,14 +13,28 @@
         <div class="col-md-12 mt-2">
             <div class="video-container">
                 <iframe  type="text/html" width="853"
-                src="https://www.youtube.com/embed/{{product['videoId']}}?autoplay=1&origin=http://example.com"
+                src="https://www.youtube.com/embed/{{product['videoId']}}?autoplay=0&origin=http://example.com"
                 frameborder="0"></iframe>
             </div>
         </div>
     </div>
     <div class="row align-items-center" style="margin-top:100px">
         <div class="col-md-6">
-            {{product['description']}}
+            <div class="row">
+                <div class="col-12">
+                    {{product['description']}}
+                </div>
+                <div class="col-12">
+                    <h2 class="text-primary font-weight-bold"> {{product['entries']}} / {{product['maxEntries']}} </h2>
+                </div>
+                <div class="col-12">
+                    <form action="{{url_for('addEntries', productName=product['productname'])}}" method="POST" class="mb-5 mt-5">
+                        <input type="text" name="email" required>
+                        <input type="number" name="entries" min="0" required>
+                        <input name="insert_name" class="btn btn-primary" type="submit" value="Submit New Name">
+                    </form>
+                </div>
+            </div>
         </div>
         <div class="col-md-6 product-image">
             <img src="{{product['photo']}}">
