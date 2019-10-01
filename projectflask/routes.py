@@ -76,12 +76,12 @@ def addEntries(productName):
       flash('Request Failed','danger')
   return redirect(url_for('product',productName=productName))
 
-@app.route('/_show_entries',methods=['GET','POST'])
+@app.route('/_show_entries',methods=['POST'])
 def showEntries():
-  candidate_email=request.args.get("candidate_email")
-  productName=request.args.get("productName")
+  candidate_email=request.form.get("candidate_email")
+  productName=request.form.get("productName")
   query={'email':candidate_email,'product':productName}
-  candidate=mongo.db.candidates.find_one(query)
+  candidate=mongo.db.candidates.find_one(query,{'_id':0})
   print(candidate_email,productName,candidate)
   return jsonify(candidate=candidate)
 

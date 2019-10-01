@@ -28,6 +28,7 @@
                 <a class="btn btn-warning" id="find_email">Find email</a>
                 <div class="col-12">
                     <h2 class="text-primary font-weight-bold"> {{product['entries']}} / {{product['maxEntries']}} </h2>
+                    <h4 class="text-primary" style="display: none" id="your-entries-text">Your entries <span id="your-entries"></span></h4>
                 </div>
                 <div class="col-12">
                     <form action="{{url_for('addEntries', productName=product['productname'])}}" method="POST" class="mb-5 mt-5">
@@ -48,6 +49,7 @@
 {%block scripts%}
 {{super()}}
 <script>
+    var asd;
     $('#find_email').on('click',function(){
         console.log($('#candidate_email').val());
         $.ajax({
@@ -61,6 +63,9 @@
         success: function(data){
                     console.log('done');
                     console.log(data);
+                    data=JSON.parse(data);
+                    $('#your-entries-text').css('display','block');
+                    $('#your-entries').html(data.candidate.entries);
                 }
         });
     })
