@@ -24,6 +24,8 @@
                 <div class="col-12">
                     {{product['description']}}
                 </div>
+                <input type="email" name="candidate_email" id="candidate_email">
+                <a class="btn btn-warning" id="find_email">Find email</a>
                 <div class="col-12">
                     <h2 class="text-primary font-weight-bold"> {{product['entries']}} / {{product['maxEntries']}} </h2>
                 </div>
@@ -42,4 +44,25 @@
     </div>
 </div>
 
+{%endblock%}
+{%block scripts%}
+{{super()}}
+<script>
+    $('#find_email').on('click',function(){
+        console.log($('#candidate_email').val());
+        $.ajax({
+        type: 'POST',
+        url: "/_show_entries",
+        data: {
+            candidate_email: $('#candidate_email').val(),
+            productName:"{{product['productname']}}"
+        },
+        dataType: "text",
+        success: function(data){
+                    console.log('done');
+                    console.log(data);
+                }
+        });
+    })
+</script>
 {%endblock%}

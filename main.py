@@ -1,10 +1,1 @@
-
-
 from projectflask import app
-
-
-
-
-
-
-
