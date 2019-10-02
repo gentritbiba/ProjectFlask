@@ -9,7 +9,7 @@ mongo = PyMongo()
 def create_app():
   app = Flask(__name__)
   app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-  app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/uploads') # you'll need to create a folder named uploads
+  app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/uploads')
   app.config['MONGO_URI'] = os.getenv('MONGO_URI')
   return app
 
