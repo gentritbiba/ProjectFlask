@@ -1,3 +1,5 @@
 apprun.py
 .env
 .flaskenv
+*.json
+env

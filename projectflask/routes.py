@@ -13,7 +13,8 @@ def index():
       db.user.insert_one({'user': request.form.get('name')})
     if request.form.get('search_btn') != None:
       return render_template('index.html',products = db.products.find(),s=request.form.get('s') )
-  return render_template('index.html',products = db.products.find())
+  
+  return render_template('index.html',products = db.products.find().sort([('_id',-1)]))
 
 
 @app.route('/register', methods=['GET','POST'])
@@ -40,7 +41,7 @@ def login():
       flash('You have been logged in!','success')
       secret = json.dumps({"secret":"SqvEuIGOgE2fhrzuCq5ErQ"})
       session['secret'] = secret
-      return redirect(url_for('register', secret=secret))
+      return redirect(url_for('register'))
     else:
       flash('Login Unsuccessful. Please check username and password' , 'danger')
   return render_template('login.html',title="Login", form=form)
