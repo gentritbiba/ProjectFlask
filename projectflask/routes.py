@@ -19,7 +19,7 @@ def index():
 
 @app.route('/register', methods=['GET','POST'])
 def register():
-  if session.get('secret') and json.loads(session['secret'] )['secret'] == "SqvEuIGOgE2fhrzuCq5ErQ":
+  if session.get('secret') and json.loads(session['secret'] )['secret'] == "SqvEuIGOgE2fhrzuCq5ErQ": 
     print('asd')
     form = RegisterProductForm()
     if form.validate_on_submit():
