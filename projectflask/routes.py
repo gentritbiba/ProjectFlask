@@ -76,6 +76,7 @@ def addEntries(productName):
     flash('Request Failed','danger')
   return redirect(url_for('product',productName=productName))
 
+
 @app.route('/_show_entries',methods=['POST'])
 def showEntries():
   candidate_email=request.form.get("candidate_email")

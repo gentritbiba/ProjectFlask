@@ -16,6 +16,8 @@ class RegistrationForm(FlaskForm):
 
     submit = SubmitField('Sign Up')
 
+
+
 class LoginForm(FlaskForm):
     
     email = StringField('Email' )
@@ -28,6 +30,8 @@ class LoginForm(FlaskForm):
 
 
 photos = UploadSet('photos', IMAGES)
+
+
 
 class RegisterProductForm(FlaskForm):
 
@@ -42,5 +46,6 @@ class RegisterProductForm(FlaskForm):
     photo = FileField(validators=[FileAllowed(photos, 'Image only!')])
 
     submit = SubmitField('Add Product')
+
 
 
