@@ -1,10 +1,30 @@
 import re
+import jwt
+import datetime
 from flask import render_template, flash,jsonify , request, redirect, url_for , session, json
 from projectflask import app, mongo,photos
 from projectflask.forms import RegistrationForm,LoginForm,RegisterProductForm
 from urllib.parse import urlparse
+from functools import wraps
 
 db=mongo.db
+
+def token_required(f):
+  @wraps(f)
+  def decorated(*args,**kwargs):
+    if session.get('token'):
+      token = json.loads(session['token'])['token']
+      try:
+        data = jwt.decode(token,app.config['SECRET_KEY'])
+      except:
+        flash('Token timed out','danger')
+        session.clear('token')
+        return redirect(url_for('login'))
+    else:
+      return redirect(url_for('login'))
+    return f(*args,**kwargs)
+  return decorated
+
 
 @app.route('/',methods=['GET','POST'])
 def index():
@@ -18,19 +38,16 @@ def index():
 
 
 @app.route('/register', methods=['GET','POST'])
+@token_required
 def register():
-  if session.get('secret') and json.loads(session['secret'] )['secret'] == "SqvEuIGOgE2fhrzuCq5ErQ":
-    print('asd')
-    form = RegisterProductForm()
-    if form.validate_on_submit():
-      filename = photos.save(form.photo.data)
-      file_url = photos.url(filename)
-      db.products.insert_one({'productname': form.productname.data,'description' : form.description.data,'maxEntries': form.maxEntries.data,'entries':0,'photo':urlparse(file_url).path,'videoId': form.videoId.data})
-      flash(f'Product "{form.productname.data}" created!', 'success')
-      return redirect(url_for('product',productName=form.productname.data))
-    return render_template('register.html',title="Register", form=form)
-  else:
-    return redirect(url_for('login'))
+  form = RegisterProductForm()
+  if form.validate_on_submit():
+    filename = photos.save(form.photo.data)
+    file_url = photos.url(filename)
+    db.products.insert_one({'productname': form.productname.data,'description' : form.description.data,'maxEntries': form.maxEntries.data,'entries':0,'photo':urlparse(file_url).path,'videoId': form.videoId.data})
+    flash(f'Product "{form.productname.data}" created!', 'success')
+    return redirect(url_for('product',productName=form.productname.data))
+  return render_template('register.html',title="Register", form=form)
 
 
 @app.route('/login', methods=['GET','POST'])
@@ -38,9 +55,11 @@ def login():
   form = LoginForm()
   if form.validate_on_submit():
     if db.users.find_one({'email':form.email.data, 'password' : form.password.data}):
+      token =jwt.encode({'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=10)}, app.config['SECRET_KEY'])
+
       flash('You have been logged in!','success')
-      secret = json.dumps({"secret":"SqvEuIGOgE2fhrzuCq5ErQ"})
-      session['secret'] = secret
+      tokenSession = json.dumps({"token": token})
+      session['token'] = tokenSession
       return redirect(url_for('register'))
     else:
       flash('Login Unsuccessful. Please check username and password' , 'danger')
@@ -86,22 +105,3 @@ def showEntries():
   print(candidate_email,productName,candidate)
   return jsonify(candidate=candidate)
 
-
-
-# from bson.objectid import ObjectId
-
-# @app.route('/editPost' , methods=['GET','POST'])
-# def editPost():
-#   if request.method == "POST":
-#     if request.form.get('delete_name')!= None :
-#       myquery={'_id': ObjectId(request.form.get('delete_name'))}
-#       db.user.delete_one(myquery)
-#       print('Deleted:', myquery)
-#       return redirect(url_for('index'))
-#     if request.form.get('update_name')!= None :
-#       myquery={'_id': ObjectId(request.form.get('update_name'))}
-#       newvalues={"$set": {'user': request.form.get(request.form.get('update_name'))}}
-#       db.user.update_one(myquery, newvalues)
-#       print('Updated:', myquery)
-#       return redirect(url_for('index'))
-#   return render_template('index.html')

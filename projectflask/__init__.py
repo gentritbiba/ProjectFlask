@@ -22,4 +22,6 @@ patch_request_class(app)
 mongo.init_app(app)
 
 
+
+
 from projectflask import routes
